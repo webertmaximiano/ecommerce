@@ -1,21 +1,17 @@
-<?php 
-session_start();
-require_once("vendor/autoload.php");
+<?php
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Factory\AppFactory;
 
-use \Slim\Slim;
+require __DIR__ . '/../vendor/autoload.php';
 
-$app = new Slim();
+$app = AppFactory::create();
 
-$app->config('debug', true);
-
-require_once("functions.php");
-require_once("site.php");
-require_once("admin.php");
-require_once("admin-users.php");
-require_once("admin-categories.php");
-require_once("admin-products.php");
-require_once("admin-orders.php");
+$app->get('/', function (Request $request, Response $response, $args) {
+    $sql = new Hcode\DB\Sql();
+    $results = $sql->select("SELECT * FROM tb_users");
+    $response = json_encode($results);
+    var_dump($response);
+});
 
 $app->run();
-
- ?>
